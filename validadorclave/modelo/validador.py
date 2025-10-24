@@ -26,7 +26,6 @@ class ReglaValidacion(ABC):
         pass
 
 
-
 # ================================
 #  CLASE: Validación Ganímedes
 # ================================
@@ -53,3 +52,39 @@ class ReglaValidacionGanimedes(ReglaValidacion):
         return True
 
 
+# ================================
+#  CLASE: Validación Calisto
+# ================================
+
+class ReglaValidacionCalisto(ReglaValidacion):
+    def __init__(self):
+        super().__init__(6)  # longitud esperada: más de 6
+
+    def _contiene_calisto(self, clave: str) -> bool:
+        palabra = "calisto"
+        if palabra not in clave.lower():
+            return False
+        sub = clave[clave.lower().index(palabra):clave.lower().index(palabra) + len(palabra)]
+        mayusculas = sum(1 for c in sub if c.isupper())
+        return 0 < mayusculas < len(palabra)
+
+    def es_valida(self, clave: str) -> bool:
+        if not self._validar_longitud(clave):
+            raise Exception("ReglaValidacionCalisto: La clave debe tener una longitud de más de 6 caracteres")
+        if not self._contiene_numero(clave):
+            raise Exception("ReglaValidacionCalisto: La clave debe contener al menos un número")
+        if not self._contiene_calisto(clave):
+            raise Exception("ReglaValidacionCalisto: La palabra calisto debe estar escrita con al menos dos letras en mayúscula")
+        return True
+
+
+# ================================
+#  CLASE: Validador
+# ================================
+
+class Validador:
+    def __init__(self, regla: ReglaValidacion):
+        self.regla = regla
+
+    def es_valida(self, clave: str) -> bool:
+        return self.regla.es_valida(clave)
