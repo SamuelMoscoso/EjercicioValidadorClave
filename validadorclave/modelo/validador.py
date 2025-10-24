@@ -27,3 +27,29 @@ class ReglaValidacion(ABC):
 
 
 
+# ================================
+#  CLASE: Validación Ganímedes
+# ================================
+
+class ReglaValidacionGanimedes(ReglaValidacion):
+    def __init__(self):
+        super().__init__(8)  # longitud esperada: más de 8
+
+    def _contiene_caracter_especial(self, clave: str) -> bool:
+        especiales = "@_#$%&"
+        return any(c in especiales for c in clave)
+
+    def es_valida(self, clave: str) -> bool:
+        if not self._validar_longitud(clave):
+            raise Exception("ReglaValidacionGanimedes: La clave debe tener una longitud de más de 8 caracteres")
+        if not self._contiene_mayuscula(clave):
+            raise Exception("ReglaValidacionGanimedes: La clave debe contener al menos una letra mayúscula")
+        if not self._contiene_minuscula(clave):
+            raise Exception("ReglaValidacionGanimedes: La clave debe contener al menos una letra minúscula")
+        if not self._contiene_numero(clave):
+            raise Exception("ReglaValidacionGanimedes: La clave debe contener al menos un número")
+        if not self._contiene_caracter_especial(clave):
+            raise Exception("ReglaValidacionGanimedes: La clave debe contener al menos un carácter especial (@, _, #, $, %, &)")
+        return True
+
+
